@@ -208,7 +208,7 @@ public class Client {
 
           String in = inFromServer.readLine();
           JSONObject obj1 = new JSONObject(in);
-          System.out.println(in);
+          //System.out.println(in); to show guesses
           if (obj1.getString("type").equals("retry")) {
             JSONArray arr = obj1.getJSONArray("guesses");
             JSONObject listItem = arr.getJSONObject(arr.length() - 1);
