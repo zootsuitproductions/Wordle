@@ -108,10 +108,11 @@ public class Client {
       hostname = args[0];
       username = args[1];
     } else if (args.length == 3) {
-      hostname = args[0];
-      username = args[1];
+      hostname = args[1];
+      username = args[2];
       if (args[0].equals("-s")) {
         encrypted = true;
+        port = 27994;
       } else {
         System.out.println("Invalid arguments: ./client <-p port> <-s> <hostname> <Northeastern-username>");
         throw new IllegalArgumentException();
@@ -167,13 +168,12 @@ public class Client {
 
    // do something with the args
     try {
-
       Socket socket;
-
       if (encrypted) {
+
         SSLSocketFactory factory =
             (SSLSocketFactory) SSLSocketFactory.getDefault();
-        socket = (SSLSocket) factory.createSocket(hostname, port);
+        socket = factory.createSocket(hostname, port);
         ((SSLSocket) socket).setEnabledProtocols(protocols);
         ((SSLSocket) socket).setEnabledCipherSuites(cipher_suites);
         ((SSLSocket) socket).startHandshake();
@@ -187,10 +187,10 @@ public class Client {
       inFromServer = new BufferedReader(new InputStreamReader(
               socket.getInputStream()));
 
-      outToServer.write("{\"type\": \"hello\", \"northeastern_username\": \"santana.d\"}\n");
+      outToServer.write("{\"type\": \"hello\", \"northeastern_username\": \"" + username + "\"}\n");
       outToServer.flush();
 
-      //HANDLE ERRORS ON  THIS ONE
+      //HANDLE ERRORS ON  THIS ONE - VERIFY LINE IS EXACT
       JSONObject obj = new JSONObject(inFromServer.readLine());
 
       String id = obj.getString("id");
