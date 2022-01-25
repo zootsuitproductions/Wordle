@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,8 +98,58 @@ public class Client {
 
   //VERIFY VALIDITY OF SERVER MESSAGESD
 
+  private static String hostname;
+  private static String username;
+  private static int port = 27993;
+  private static boolean encrypted = false;
+
   public static void main(String[] args) {
 
+    if (args.length == 2) {
+      hostname = args[0];
+      username = args[1];
+    } else if (args.length == 3) {
+      if (args[0].equals("-s")) {
+        encrypted = true;
+      } else {
+        System.out.println("Invalid arguments: ./client <-p port> <-s> <hostname> <Northeastern-username>");
+        return;
+      }
+    } else if (args.length == 4) {
+      hostname = args[2];
+      username = args[3];
+      if (args[0].equals("-p")) {
+        try {
+          port = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+          System.out.println("Invalid port: ./client <-p port> <-s> <hostname> <Northeastern-username>");
+          return;
+        }
+      } else {
+        System.out.println("Invalid arguments: ./client <-p port> <-s> <hostname> <Northeastern-username>");
+        return;
+      }
+    } else if (args.length == 5) {
+      hostname = args[3];
+      username = args[4];
+      if (args[0].equals("-p")) {
+        try {
+          port = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+          System.out.println("Invalid port: ./client <-p port> <-s> <hostname> <Northeastern-username>");
+          return;
+        }
+        if (args[2].equals("-s")) {
+          encrypted = true;
+        } else {
+          System.out.println("Invalid arguments: ./client <-p port> <-s> <hostname> <Northeastern-username>");
+          return;
+        }
+      } else {
+        System.out.println("Invalid arguments: ./client <-p port> <-s> <hostname> <Northeastern-username>");
+        return;
+      }
+    }
     //System.out.println(args[0]);
 
     BufferedReader inFromServer;
@@ -192,11 +243,12 @@ public class Client {
 
     try {
 
-      Socket client = new Socket("proj1.3700.network", 27993);
+      //Socket client = new Socket("proj1.3700.network", 27993);
+      Socket client = new Socket(hostname, port);
       inFromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
       outToServer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
 
-      outToServer.write("{\"type\": \"hello\", \"northeastern_username\": \"santana.d\"}\n");
+      outToServer.write("{\"type\": \"hello\", \"northeastern_username\": \"" + username + "\"}\n");
       outToServer.flush();
     JSONObject obj = new JSONObject(inFromServer.readLine());
 
