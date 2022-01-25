@@ -103,8 +103,7 @@ public class Client {
   private static int port = 27993;
   private static boolean encrypted = false;
 
-  public static void main(String[] args) {
-
+  private static void parseArgs(String[] args) {
     if (args.length == 2) {
       hostname = args[0];
       username = args[1];
@@ -113,7 +112,7 @@ public class Client {
         encrypted = true;
       } else {
         System.out.println("Invalid arguments: ./client <-p port> <-s> <hostname> <Northeastern-username>");
-        return;
+        throw new IllegalArgumentException();
       }
     } else if (args.length == 4) {
       hostname = args[2];
@@ -123,11 +122,11 @@ public class Client {
           port = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
           System.out.println("Invalid port: ./client <-p port> <-s> <hostname> <Northeastern-username>");
-          return;
+          throw new IllegalArgumentException();
         }
       } else {
         System.out.println("Invalid arguments: ./client <-p port> <-s> <hostname> <Northeastern-username>");
-        return;
+        throw new IllegalArgumentException();
       }
     } else if (args.length == 5) {
       hostname = args[3];
@@ -137,167 +136,177 @@ public class Client {
           port = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
           System.out.println("Invalid port: ./client <-p port> <-s> <hostname> <Northeastern-username>");
-          return;
+          throw new IllegalArgumentException();
         }
         if (args[2].equals("-s")) {
           encrypted = true;
         } else {
           System.out.println("Invalid arguments: ./client <-p port> <-s> <hostname> <Northeastern-username>");
-          return;
+          throw new IllegalArgumentException();
         }
       } else {
         System.out.println("Invalid arguments: ./client <-p port> <-s> <hostname> <Northeastern-username>");
-        return;
+        throw new IllegalArgumentException();
       }
     }
-    //System.out.println(args[0]);
+  }
+
+  public static void main(String[] args) {
+    try {
+      parseArgs(args);
+    } catch (IllegalArgumentException e) {
+      return;
+    }
 
     BufferedReader inFromServer;
     BufferedWriter outToServer;
 
-//   // do something with the args
-//    try {
-//
-//      Socket socket =
-//
-//      SSLSocketFactory factory =
-//          (SSLSocketFactory) SSLSocketFactory.getDefault();
-//      SSLSocket socket =
-//          (SSLSocket) factory.createSocket("proj1.3700.network", 27994);
-//
-//      socket.setEnabledProtocols(protocols);
-//      socket.setEnabledCipherSuites(cipher_suites);
-//
-//      socket.startHandshake();
-//
-//      outToServer = new BufferedWriter(
-//              new OutputStreamWriter(
-//                  socket.getOutputStream()));
-//
-////      outToServer.write("GET / HTTP/1.0\n");
-////      outToServer.flush();
-//
-////      if (outToServer.checkError())
-////        System.out.println("SSLSocketClient:  java.io.PrintWriter error");
-//
-//      /* read response */
-//      inFromServer = new BufferedReader(
-//          new InputStreamReader(
-//              socket.getInputStream()));
-//
-//      outToServer.write("{\"type\": \"hello\", \"northeastern_username\": \"santana.d\"}\n");
-//      outToServer.flush();
-//
-//
-//      //HANDLE ERRORS ON  THIS ONE
-//      JSONObject obj = new JSONObject(inFromServer.readLine());
-//
-//      String id = obj.getString("id");
-//      String type = obj.getString("type");
-//
-//      if (type.equals("start")) {
-//        WordleGame game = new WordleGame();
-//
-//        while (!game.isOver) {
-//          String guess = game.makeGuess();
-//
-//          outToServer
-//              .write("{\"type\": \"guess\", \"id\": \"" + id + "\", \"word\": \"" + guess + "\"}\n");
-//          outToServer.flush();
-//
-//          String in = inFromServer.readLine();
-//          JSONObject obj1 = new JSONObject(in);
-//          System.out.println(in);
-//          if (obj1.getString("type").equals("retry")) {
-//            JSONArray arr = obj1.getJSONArray("guesses");
-//            JSONObject listItem = arr.getJSONObject(arr.length() - 1);
-//            JSONArray guessInfo = listItem.getJSONArray("marks");
-//
-//            for (int i = 0; i < guessInfo.length(); i++) {
-//              int value = guessInfo.getInt(i);
-//              if (value == 1) {
-//                game.lettersInWord.add(guess.charAt(i));
-//                game.halfGuessedLetterLocations.put(guess.charAt(i), i);
-//              } else if (value == 2) {
-//                game.guessedLetterLocations.put(guess.charAt(i), i);
-//              }
-//            }
-//
-//            game.filterWords();
-//          } else if (obj1.getString("type").equals("bye")) {
-//            System.out.println(guess);
-//            game.isOver = true;
-//            //flag spxsidpudvzqzrxfzann
-//            //flag SLL: sqacrnknbqgegolqment
-//          }
-//        }
-//        socket.close();
-//        outToServer.close();
-//        inFromServer.close();
-//      }
-//
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
 
 
+   // do something with the args
     try {
 
-      //Socket client = new Socket("proj1.3700.network", 27993);
-      Socket client = new Socket(hostname, port);
-      inFromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
-      outToServer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+      Socket socket;
 
-      outToServer.write("{\"type\": \"hello\", \"northeastern_username\": \"" + username + "\"}\n");
-      outToServer.flush();
-    JSONObject obj = new JSONObject(inFromServer.readLine());
-
-    String id = obj.getString("id");
-    String type = obj.getString("type");
-
-    if (type.equals("start")) {
-      WordleGame game = new WordleGame();
-
-      while (!game.isOver) {
-        String guess = game.makeGuess();
-
-        outToServer
-            .write("{\"type\": \"guess\", \"id\": \"" + id + "\", \"word\": \"" + guess + "\"}\n");
-        outToServer.flush();
-
-        String in = inFromServer.readLine();
-        JSONObject obj1 = new JSONObject(in);
-        System.out.println(in);
-        if (obj1.getString("type").equals("retry")) {
-          JSONArray arr = obj1.getJSONArray("guesses");
-          JSONObject listItem = arr.getJSONObject(arr.length() - 1);
-          JSONArray guessInfo = listItem.getJSONArray("marks");
-
-          for (int i = 0; i < guessInfo.length(); i++) {
-            int value = guessInfo.getInt(i);
-            if (value == 1) {
-              game.lettersInWord.add(guess.charAt(i));
-              game.halfGuessedLetterLocations.put(guess.charAt(i), i);
-            } else if (value == 2) {
-              game.guessedLetterLocations.put(guess.charAt(i), i);
-            }
-          }
-
-          game.filterWords();
-        } else if (obj1.getString("type").equals("bye")) {
-          System.out.println(guess);
-          game.isOver = true;
-          //flag spxsidpudvzqzrxfzann
-        }
+      if (encrypted) {
+        SSLSocketFactory factory =
+            (SSLSocketFactory) SSLSocketFactory.getDefault();
+        socket = factory.createSocket(hostname, port);
+        ((SSLSocket) socket).setEnabledProtocols(protocols);
+        ((SSLSocket) socket).setEnabledCipherSuites(cipher_suites);
+        ((SSLSocket) socket).startHandshake();
+      } else {
+       socket = new Socket(hostname, port);
       }
-      client.close();
-      outToServer.close();
-      inFromServer.close();
+
+      outToServer = new BufferedWriter(new OutputStreamWriter(
+                  socket.getOutputStream()));
+
+      inFromServer = new BufferedReader(new InputStreamReader(
+              socket.getInputStream()));
+
+      outToServer.write("{\"type\": \"hello\", \"northeastern_username\": \"santana.d\"}\n");
+      outToServer.flush();
+
+      //HANDLE ERRORS ON  THIS ONE
+      JSONObject obj = new JSONObject(inFromServer.readLine());
+
+      String id = obj.getString("id");
+      String type = obj.getString("type");
+
+      if (type.equals("start")) {
+        WordleGame game = new WordleGame();
+
+        while (!game.isOver) {
+          String guess = game.makeGuess();
+
+          outToServer
+              .write("{\"type\": \"guess\", \"id\": \"" + id + "\", \"word\": \"" + guess + "\"}\n");
+          outToServer.flush();
+
+          String in = inFromServer.readLine();
+          JSONObject obj1 = new JSONObject(in);
+          System.out.println(in);
+          if (obj1.getString("type").equals("retry")) {
+            JSONArray arr = obj1.getJSONArray("guesses");
+            JSONObject listItem = arr.getJSONObject(arr.length() - 1);
+            JSONArray guessInfo = listItem.getJSONArray("marks");
+
+            for (int i = 0; i < guessInfo.length(); i++) {
+              int value = guessInfo.getInt(i);
+              if (value == 1) {
+                game.lettersInWord.add(guess.charAt(i));
+                game.halfGuessedLetterLocations.put(guess.charAt(i), i);
+              } else if (value == 2) {
+                game.guessedLetterLocations.put(guess.charAt(i), i);
+              }
+            }
+
+            game.filterWords();
+          } else if (obj1.getString("type").equals("bye")) {
+            System.out.println(guess);
+            game.isOver = true;
+            //flag spxsidpudvzqzrxfzann
+            //flag SLL: sqacrnknbqgegolqment
+          }
+        }
+        socket.close();
+        outToServer.close();
+        inFromServer.close();
+      }
+
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      //e.printStackTrace();
     }
 
-  } catch (JSONException | IOException e) {
-    ///aaa
-    }
+
+
+   // unencrypted
+//
+//    try {
+//
+//      if (encrypted) {
+//
+//      } else {
+//        Socket client = new Socket(hostname, port);
+//      }
+//
+//      //Socket client = new Socket("proj1.3700.network", 27993);
+//      Socket client = new Socket(hostname, port);
+//      inFromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
+//      outToServer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+//
+//      outToServer.write("{\"type\": \"hello\", \"northeastern_username\": \"" + username + "\"}\n");
+//      outToServer.flush();
+//    JSONObject obj = new JSONObject(inFromServer.readLine());
+//
+//    String id = obj.getString("id");
+//    String type = obj.getString("type");
+//
+//    if (type.equals("start")) {
+//      WordleGame game = new WordleGame();
+//
+//      while (!game.isOver) {
+//        String guess = game.makeGuess();
+//
+//        outToServer
+//            .write("{\"type\": \"guess\", \"id\": \"" + id + "\", \"word\": \"" + guess + "\"}\n");
+//        outToServer.flush();
+//
+//        String in = inFromServer.readLine();
+//        JSONObject obj1 = new JSONObject(in);
+//        System.out.println(in);
+//        if (obj1.getString("type").equals("retry")) {
+//          JSONArray arr = obj1.getJSONArray("guesses");
+//          JSONObject listItem = arr.getJSONObject(arr.length() - 1);
+//          JSONArray guessInfo = listItem.getJSONArray("marks");
+//
+//          for (int i = 0; i < guessInfo.length(); i++) {
+//            int value = guessInfo.getInt(i);
+//            if (value == 1) {
+//              game.lettersInWord.add(guess.charAt(i));
+//              game.halfGuessedLetterLocations.put(guess.charAt(i), i);
+//            } else if (value == 2) {
+//              game.guessedLetterLocations.put(guess.charAt(i), i);
+//            }
+//          }
+//
+//          game.filterWords();
+//        } else if (obj1.getString("type").equals("bye")) {
+//          System.out.println(guess);
+//          game.isOver = true;
+//          //flag spxsidpudvzqzrxfzann
+//        }
+//      }
+//      client.close();
+//      outToServer.close();
+//      inFromServer.close();
+//    }
+//
+//  } catch (JSONException | IOException e) {
+//    ///aaa
+//    }
 
 }
 }
