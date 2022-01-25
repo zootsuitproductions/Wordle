@@ -108,6 +108,8 @@ public class Client {
       hostname = args[0];
       username = args[1];
     } else if (args.length == 3) {
+      hostname = args[0];
+      username = args[1];
       if (args[0].equals("-s")) {
         encrypted = true;
       } else {
@@ -169,9 +171,6 @@ public class Client {
       Socket socket;
 
       if (encrypted) {
-        System.out.println(port);
-        System.out.println(hostname);
-        System.out.println(username);
         SSLSocketFactory factory =
             (SSLSocketFactory) SSLSocketFactory.getDefault();
         socket = (SSLSocket) factory.createSocket(hostname, port);
