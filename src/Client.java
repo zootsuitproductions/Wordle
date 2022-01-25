@@ -171,7 +171,7 @@ public class Client {
       if (encrypted) {
         SSLSocketFactory factory =
             (SSLSocketFactory) SSLSocketFactory.getDefault();
-        socket = factory.createSocket(hostname, port);
+        socket = (SSLSocket) factory.createSocket(hostname, port);
         ((SSLSocket) socket).setEnabledProtocols(protocols);
         ((SSLSocket) socket).setEnabledCipherSuites(cipher_suites);
         ((SSLSocket) socket).startHandshake();
@@ -236,8 +236,8 @@ public class Client {
       }
 
     } catch (Exception e) {
-      e.printStackTrace();
-      //System.out.println(e.getMessage());
+//      System.out.println(username);
+      System.out.println(e.getMessage());
       //e.printStackTrace();
     }
 
