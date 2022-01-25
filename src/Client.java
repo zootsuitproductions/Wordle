@@ -169,6 +169,9 @@ public class Client {
       Socket socket;
 
       if (encrypted) {
+        System.out.println(port);
+        System.out.println(hostname);
+        System.out.println(username);
         SSLSocketFactory factory =
             (SSLSocketFactory) SSLSocketFactory.getDefault();
         socket = (SSLSocket) factory.createSocket(hostname, port);
