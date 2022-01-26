@@ -6,6 +6,74 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+
+// unencrypted
+//
+//    try {
+//
+//      if (encrypted) {
+//
+//      } else {
+//        Socket client = new Socket(hostname, port);
+//      }
+//
+//      //Socket client = new Socket("proj1.3700.network", 27993);
+//      Socket client = new Socket(hostname, port);
+//      inFromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
+//      outToServer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+//
+//      outToServer.write("{\"type\": \"hello\", \"northeastern_username\": \"" + username + "\"}\n");
+//      outToServer.flush();
+//    JSONObject obj = new JSONObject(inFromServer.readLine());
+//
+//    String id = obj.getString("id");
+//    String type = obj.getString("type");
+//
+//    if (type.equals("start")) {
+//      WordleGame game = new WordleGame();
+//
+//      while (!game.isOver) {
+//        String guess = game.makeGuess();
+//
+//        outToServer
+//            .write("{\"type\": \"guess\", \"id\": \"" + id + "\", \"word\": \"" + guess + "\"}\n");
+//        outToServer.flush();
+//
+//        String in = inFromServer.readLine();
+//        JSONObject obj1 = new JSONObject(in);
+//        System.out.println(in);
+//        if (obj1.getString("type").equals("retry")) {
+//          JSONArray arr = obj1.getJSONArray("guesses");
+//          JSONObject listItem = arr.getJSONObject(arr.length() - 1);
+//          JSONArray guessInfo = listItem.getJSONArray("marks");
+//
+//          for (int i = 0; i < guessInfo.length(); i++) {
+//            int value = guessInfo.getInt(i);
+//            if (value == 1) {
+//              game.lettersInWord.add(guess.charAt(i));
+//              game.halfGuessedLetterLocations.put(guess.charAt(i), i);
+//            } else if (value == 2) {
+//              game.guessedLetterLocations.put(guess.charAt(i), i);
+//            }
+//          }
+//
+//          game.filterWords();
+//        } else if (obj1.getString("type").equals("bye")) {
+//          System.out.println(guess);
+//          game.isOver = true;
+//          //flag spxsidpudvzqzrxfzann
+//        }
+//      }
+//      client.close();
+//      outToServer.close();
+//      inFromServer.close();
+//    }
+//
+//  } catch (JSONException | IOException e) {
+//    ///aaa
+//    }
+
+
 public class WordleGame {
 
   private final List<String> words;
