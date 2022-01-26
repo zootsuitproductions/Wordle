@@ -81,18 +81,18 @@ public class Client {
         }
         break;
       default:
-        System.out.println("Too many arguments: ./client <-p port> <-s> <hostname> <Northeastern-username>");
+        System.out.println("Invalid arguments: ./client <-p port> <-s> <hostname> <Northeastern-username>");
         throw new IllegalArgumentException();
     }
   }
 
   public static void main(String[] args) {
-    String[] fakeArgs = {"-s", "proj1.3700.network", "santana.d"};
+    //String[] fakeArgs = {"-s", "proj1.3700.network", "santana.d"};
 
     //MAKE SURE TO REVERT BEFORE SUBMITTING
 
     try {
-      parseArgs(fakeArgs);
+      parseArgs(args);
     } catch (IllegalArgumentException e) {
       return;
     }
