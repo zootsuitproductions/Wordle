@@ -221,6 +221,7 @@ public class Client {
     }
 
     public void filterWords() {
+      //perfect guesses: 2
       for (Map.Entry<Character, Integer> entry : guessedLetterLocations.entrySet()) {
         for (int i = words.size() - 1; i >= 0; i -= 1) {
           if (words.get(i).charAt(entry.getValue()) != entry.getKey()) {
@@ -229,6 +230,8 @@ public class Client {
         }
       }
 
+
+      //imperfect guesses: 1
       for (Map.Entry<Character, Integer> entry : halfGuessedLetterLocations.entrySet()) {
         for (int i = words.size() - 1; i >= 0; i -= 1) {
           if (words.get(i).charAt(entry.getValue()) == entry.getKey()) {
